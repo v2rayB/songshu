@@ -1,0 +1,421 @@
+<html lang="zh" class="ios iphone mobile portrait" data-dpr="1" style="font-size: 41.4px; overflow-y: scroll;">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no">
+		<link rel="icon" href="/favicon.ico">
+		<title>坚果加速器 - 支付</title>
+		<style>
+			.loading {
+				position: fixed;
+				left: 38%;
+				top: 44%;
+				animation: loading 2s infinite;
+			}
+			
+			@keyframes loading {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+			
+			.triangle {
+				width: 0;
+				height: 0;
+				border-top: 1.20773rem solid #acbbc1;
+				border-right: 1.20773rem solid transparent;
+				position: absolute;
+				margin-top: -2px;
+				margin-left: -2px;
+			}
+			
+			.pay-sel {
+				background: url('imgs/sel.png') no-repeat;
+				background-size:90% 100%;
+				height: 140px;
+				width: 45%;
+				margin-left: 5%;
+				margin-top: 10px;
+				color: #24232C;
+				
+			}
+			
+			.pay-nosel {
+				background: url('imgs/nosel.png') no-repeat;
+				background-size:90% 100%;
+				height: 140px;
+				width: 45%;
+				margin-left: 5%;
+				margin-top: 10px;
+				color: #FFD851;
+			}
+			
+			
+			.selalipay {
+				display: flex;
+				width: 100px;
+				height: 30px;
+				background-color: #f7ffff;
+				border-radius: 5px;
+				justify-content: center;
+				align-items: center;
+				margin-left: 10px;
+				border: 1px #1977FF solid
+			}
+			.noselalipay {
+				display: flex;
+				width: 100px;
+				height: 30px;
+				background-color: #ffffff;
+				border-radius: 5px;
+				justify-content: center;
+				align-items: center;
+				margin-left: 10px;
+				border: 1px #bcbcbc solid
+			}
+			.selwx {
+				display: flex;
+				width: 100px;
+				height: 30px;
+				background-color: #f7ffff;
+				border-radius: 5px;
+				justify-content: center;
+				align-items: center;
+				margin-left: 10px;
+				border: 1px #1977FF solid
+			}
+			.noselwx {
+				display: flex;
+				width: 100px;
+				height: 30px;
+				background-color: #ffffff;
+				border-radius: 5px;
+				justify-content: center;
+				align-items: center;
+				margin-left: 10px;
+				border: 1px #bcbcbc solid
+			}
+			
+		</style>
+	</head>
+	<body style="margin: 0;background: url('imgs/bg.png') no-repeat;background-size:100% 100%;height: auto;background-color: #26444D;">
+
+		<div id="app">
+			<img src="imgs/home.png" style="width: 50%;margin-left: 25%;margin-top: 10px;"/>
+			<img src="imgs/t.png" style="width: 70%;margin-left: 15%;margin-top: 10px;"/>
+			<div style="text-align: center;font-size: 16px;color: white;margin-top: 5px;">购买会员后5星好评截图联系客服有机会获得3天会员哦</div>
+			
+			<div style="display: flex;margin-top: 15px;">
+				<div style="flex: 1;text-align: center;">
+					<div><img src="imgs/i1.png" style="width: 36px;height: 36px;"/></div>
+					<div><img src="imgs/t1.png" style="width: 80px;height: 16px;margin-top: 5px;"/></div>
+				</div>
+				<div style="flex: 1;text-align: center;">
+					<div><img src="imgs/i2.png" style="width: 36px;height: 36px;"/></div>
+					<div><img src="imgs/t2.png" style="width: 80px;height: 16px;margin-top: 5px;"/></div>
+				</div>
+				<div style="flex: 1;text-align: center;">
+					<div><img src="imgs/i3.png" style="width: 36px;height: 36px;"/></div>
+					<div><img src="imgs/t3.png" style="width: 80px;height: 16px;margin-top: 5px;"/></div>
+				</div>
+				<div style="flex: 1;text-align: center;">
+					<div><img src="imgs/i4.png" style="width: 36px;height: 36px;"/></div>
+					<div><img src="imgs/t4.png" style="width: 80px;height: 16px;margin-top: 5px;"/></div>
+				</div>
+			</div>
+			
+			<div style="display: flex;flex-wrap: wrap;">
+				<div v-for="(item,index) in packageList" :class="item.selected==0?'pay-nosel':'pay-sel'" @click="switchPackage(index)">
+					
+					<div style="display: flex;">
+						<div style="flex: 3;margin-top: 15px;margin-left: 20px;">
+							<div style="color: #FFFFFF;font-size: 24px;font-weight: bold;">{{item.name}}</div>
+							<div style="color: #FFFFFF;font-size: 24px;">￥{{item.priceDesc}}</div>
+						</div>
+						<div style="flex: 2;margin-top: 10px;text-align: center;margin-right: 20px;">
+							<div v-if="item.corner!=''" style="background: url('imgs/top.png') no-repeat;background-size:100% 100%;width: 50px;height: 50px;" >
+								<div style="color: #FFFFFF;font-size: 18px;">优惠</div>
+								<div style="color: #FFFFFF;font-size: 18px;">{{item.corner}}</div>
+							</div>
+						</div>
+					</div>
+					
+					<div style="display: flex;margin-top: 10px;align-items: center;">
+						<div :style="item.selected==1?'color: #ffffff;font-size: 26px;flex: 3;margin-left: 20px;text-decoration: line-through;':'color: #898AA9;font-size: 26px;flex: 3;text-decoration: line-through;margin-left: 20px;'">￥{{item.remark}}</div>
+						<div style="flex: 2;">
+							<img v-if="item.selected==1" src="imgs/pay-sel.png" style="width:26px;height: 26px;"/>
+							<img v-else="item.selected==0" src="imgs/pay-nosel.png" style="width:26px;height: 26px;"/>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<div style="display: flex;margin-left: 5%;margin-top: 10px;align-items: center;">
+				<div style="font-size: 20px;color: #ffffff;font-family: PingFang SC;font-weight: bold;">支付方式 : </div>
+				<div style="display: flex;margin-top: 5px;">
+					<div :class="curPay==1?'selalipay':'noselalipay'" @click="switchPay(1)">
+						<img src="imgs/alipay-icon.svg" style="width: 25px;height: 25px;"/>
+						<div style="color: #1977FF;font-size: 15px;margin-left: 5px;font-weight: bold;">支付宝</div>
+					</div>
+					<div :class="curPay==2?'selwx':'noselwx'" @click="switchPay(2)">
+						<img src="imgs/wxpay.png" style="width: 25px;height: 25px;"/>
+						<div style="color: green;font-size: 15px;margin-left: 5px;font-weight: bold;">微信</div>
+					</div>
+				</div>
+			</div>
+			
+			<div style="background: url('imgs/pay.png') no-repeat;background-size:100% 100%;height: 50px;width: 80%;margin-left: 10%;
+			font-size: 24px;font-weight: 400;display: flex;justify-content: center;align-items: center;margin-top: 15px;font-weight: bold;"  @click="pay()">
+				立即购买
+			</div>
+			
+			<div v-if="isLoading" class="loading"><img src="imgs/loading.png"/></div>
+			
+			<form :action="GoodPayUrl" method="post" id="goodPay" style="display: none;">
+				<input name="pid" id="goodPay-pid"/>
+				<input name="type" id="goodPay-type"/>
+				<input name="out_trade_no"  id="goodPay-out_trade_no"/>
+				<input name="notify_url" id="goodPay-notify_url"/>
+				<input name="return_url"  id="goodPay-return_url"/>
+				<input name="name" id="goodPay-name"/>
+				<input name="money"  id="goodPay-money"/>
+				
+				<input name="sign" id="goodPay-sign"/>
+				<input name="sign_type" id="goodPay-sign_type"/>
+			</form>
+		</div>
+
+		<script src="js/config.js"></script>
+		<script src="js/jquery.js"></script>
+		<script src="js/vue.js"></script>
+		<script src="js/axios.js"></script>
+		<script src="js/alert.js"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '#app',
+				data: {
+					curPid: 38,
+					curPay: 1,
+					packageList: [
+						{
+							pid: 37,
+							name: "每年",
+							selected: 0,
+							priceDesc: "328",
+							remark: "499",
+							corner: "40%"
+						},
+						{
+							pid: 41,
+							name: "半年",
+							selected: 0,
+							priceDesc: "188",
+							remark: "249",
+							corner: "30%"
+						},
+						{
+							pid: 38,
+							name: "季度",
+							selected: 1,
+							priceDesc: "99",
+							remark: "126",
+							corner: "20%"
+						},
+						{
+							pid: 39,
+							name: "每月",
+							selected: 0,
+							priceDesc: "42",
+							remark: "48",
+							corner: ""
+						}
+					],
+					isLoading: false,
+					zfb_pay_1: "good",
+					zfb_pay_2: "OFF",
+					GoodPayUrl: "",
+					xkToken: localStorage.getItem("xk-token")
+				},
+				created: function() {
+					serverIp = "https://api.zytrt.cn"
+					this.init();
+					// setInterval(this.checkOrderStatus,3000)
+				},
+				mounted: function() {
+				},
+				methods: {
+					init: function() {
+						var that = this
+						axios({
+							method: 'get',
+							url: serverIp + '/vpn/pkg/index',
+							headers: {
+								'xk-token': this.xkToken,
+							}
+						}).then(function(response) {
+							var data = response.data;
+							if (data.code != 200) {
+								alert("当前会话信息已过期,请重新从APP内打开支付")
+								return
+							}
+							var result = data.result
+							that.zfb_pay_1 = result.zfb_pay_1
+							that.zfb_pay_2 = result.zfb_pay_2
+							that.GoodPayUrl = result.good_pay_url
+						})
+					},
+					switchPay: function(id) {
+						this.curPay = id
+					},
+					switchPackage: function(index) {
+						for (var item of this.packageList) {
+							item.selected = 0
+						}
+						this.packageList[index].selected = 1
+						this.curPid = this.packageList[index].pid
+					},
+					pay: function() {
+						if (this.curPay == 1) {
+							this.goodPay()
+						}else if (this.curPay == 2) {
+							//this.yb2Pay()
+							this.goodPay()
+						}else {
+							this.goodPay()
+						}
+					},
+					ybPay: function() {
+						this.isLoading = true
+						var that = this
+						var data = new FormData();
+						data.append('pkg_id', this.curPid);
+						data.append('pay_type', this.curPay);
+						axios({
+								method: 'post',
+								url: serverIp + '/vpn/pay_yb',
+								headers: {
+									'xk-token': this.xkToken,
+								},
+								data: data
+							})
+							.then(function(response) {
+								that.isLoading = false
+								var data = response.data;
+								if (data.code != 200) {
+									alert(data.remark)
+									return
+								}
+								window.location.href =  data.result
+							})
+					},
+					yb2Pay: function() {
+						this.isLoading = true
+						var that = this
+						var data = new FormData();
+						data.append('pkg_id', this.curPid);
+						data.append('pay_type', this.curPay);
+						axios({
+								method: 'post',
+								url: serverIp + '/vpn/pay_yb2',
+								headers: {
+									'xk-token': this.xkToken,
+								},
+								data: data
+							})
+							.then(function(response) {
+								that.isLoading = false
+								var data = response.data;
+								if (data.code != 200) {
+									alert(data.remark)
+									return
+								}
+								window.location.href =  data.result
+							})
+					},
+					ybPay2: function() {
+						this.isLoading = true
+						var that = this
+						var data = new FormData();
+						data.append('pkg_id', this.curPid);
+						data.append('pay_type', this.curPay);
+						axios({
+								method: 'post',
+								url: serverIp + '/vpn/pay_yb1',
+								headers: {
+									'xk-token': this.xkToken,
+								},
+								data: data
+							})
+							.then(function(response) {
+								that.isLoading = false
+								var data = response.data;
+								if (data.code != 200) {
+									alert(data.remark)
+									return
+								}
+								window.location.href =  data.result
+							})
+					},
+					goodPay: function() {
+						this.isLoading = true
+						var that = this
+						var data = new FormData();
+						data.append('pkg_id', this.curPid);
+						data.append('pay_type', this.curPay);
+						axios({
+								method: 'post',
+								url: serverIp + '/vpn/pay_good',
+								headers: {
+									'xk-token': this.xkToken,
+								},
+								data: data
+							})
+							.then(function(response) {
+								that.isLoading = false
+								var data = response.data;
+								if (data.code != 200) {
+									alert(data.remark)
+									return
+								}
+								var goodPay = data.result
+								$("#goodPay-pid").val(goodPay.pid)
+								$("#goodPay-type").val(goodPay.type)
+								$("#goodPay-out_trade_no").val(goodPay.out_trade_no)
+								$("#goodPay-notify_url").val(goodPay.notify_url)
+								$("#goodPay-return_url").val(goodPay.return_url)
+								$("#goodPay-name").val(goodPay.name)
+								$("#goodPay-money").val(goodPay.money)
+								$("#goodPay-sign").val(goodPay.sign)
+								$("#goodPay-sign_type").val(goodPay.sign_type)
+								
+								localStorage.setItem("xk_order_no",goodPay.out_trade_no)
+								$("#goodPay").submit()
+							})
+					},
+					checkOrderStatus: function() {
+						if (localStorage.getItem("xk_order_no") == null) {
+							return
+						}
+						var that = this
+						axios({
+								method: 'get',
+								url: serverIp + '/vpn/pay_status?orderNo='+localStorage.getItem("xk_order_no"),
+							})
+							.then(function(response) {
+								var data = response.data;
+								if (data.code != 200) {
+									return
+								}
+								localStorage.removeItem("xk_order_no")
+								alert("支付成功,请返回APP查收。")
+								
+							})
+					},
+				}
+			})
+		</script>
+	</body>
+</html>
